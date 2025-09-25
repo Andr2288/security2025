@@ -1,0 +1,29 @@
+### GET ALL FLASHCARDS
+GET http://localhost:8080/api/v1/flashcards
+
+### GET ONE FLASHCARD
+GET http://localhost:8080/api/v1/flashcards/68d45dc3239ab744481465d5
+
+### DELETE ONE FLASHCARD
+DELETE http://localhost:8080/api/v1/flashcards/3
+
+### CREATE ONE FLASHCARD
+POST http://localhost:8080/api/v1/flashcards
+Content-Type: application/json
+
+{
+  "text": "Pizza",
+  "translation": "Піца",
+  "explanation": "Piece of food"
+}
+
+### UPDATE ONE FLASHCARD
+PUT http://localhost:8080/api/v1/flashcards
+Content-Type: application/json
+
+{
+  "id": "68d45dc3239ab744481465d1",
+  "text": "Hello Updated",
+  "translation": "Привіт Оновлено",
+  "explanation": "Greeting word in English Updated"
+}
