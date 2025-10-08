@@ -24,7 +24,10 @@ public class FlashcardService {
     @PostConstruct
     void init() {
 
-        if (repository.count() == 0) {
+        if (repository.count() < 5) {
+
+            repository.deleteAll();
+
             List<Flashcard> flashcards = new ArrayList<>();
 
             flashcards.add(new Flashcard("Hello", "Привіт", "Greeting word in English"));
