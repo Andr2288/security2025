@@ -1,37 +1,80 @@
-### GET ALL FLASHCARDS
+### 1. ✅ SUCCESS - USER читає всі flashcards (дозволено)
 GET http://localhost:8080/api/v1/flashcards
-Authorization: Basic admin 1234567890
+Authorization: Basic user user
 Accept: application/json
 
-### GET ONE FLASHCARD
-GET http://localhost:8080/api/v1/flashcards/68dada404105d5c99ac0a5e7
-Authorization: Basic admin 1234567890
-Accept: application/json
+###
 
-### DELETE ONE FLASHCARD
+### 2. ❌ FAIL - USER намагається видалити flashcard (заборонено)
 DELETE http://localhost:8080/api/v1/flashcards/68dada404105d5c99ac0a5e7
-Authorization: Basic admin:1234567890
-X-CSRF-TOKEN: your-csrf-token-here
+Authorization: Basic user user
 
-### CREATE ONE FLASHCARD
+###
+
+### 3. ✅ SUCCESS - ADMIN видаляє flashcard (дозволено)
+DELETE http://localhost:8080/api/v1/flashcards/68dada404105d5c99ac0a5e7
+Authorization: Basic admin admin
+
+###
+
+### 4. ❌ FAIL - USER намагається створити flashcard (заборонено)
 POST http://localhost:8080/api/v1/flashcards
-Authorization: Basic admin 1234567890
+Authorization: Basic user user
 Content-Type: application/json
 
 {
-  "text": "Pizza",
-  "translation": "Піца",
-  "explanation": "Piece of food"
+  "text": "Car",
+  "translation": "Машина",
+  "explanation": "Vehicle"
 }
 
-### UPDATE ONE FLASHCARD
+###
+
+### 5. ✅ SUCCESS - ADMIN створює flashcard (дозволено)
+POST http://localhost:8080/api/v1/flashcards
+Authorization: Basic admin admin
+Content-Type: application/json
+
+{
+  "text": "Book",
+  "translation": "Книга",
+  "explanation": "Reading material"
+}
+
+###
+
+### 6. ❌ FAIL - USER намагається зайти на /hello/admin (заборонено)
+GET http://localhost:8080/api/v1/flashcards/hello/admin
+Authorization: Basic user user
+
+###
+
+### 7. ✅ SUCCESS - ADMIN заходить на /hello/admin (дозволено)
+GET http://localhost:8080/api/v1/flashcards/hello/admin
+Authorization: Basic admin admin
+
+###
+
+### 8. ❌ FAIL - ADMIN намагається зайти на /hello/superadmin (заборонено)
+GET http://localhost:8080/api/v1/flashcards/hello/superadmin
+Authorization: Basic admin admin
+
+###
+
+### 9. ✅ SUCCESS - SUPERADMIN заходить на /hello/superadmin (дозволено)
+GET http://localhost:8080/api/v1/flashcards/hello/superadmin
+Authorization: Basic superadmin superadmin
+
+###
+
+### 10. ✅ SUCCESS - SUPERADMIN оновлює flashcard (дозволено)
 PUT http://localhost:8080/api/v1/flashcards
-Authorization: Basic admin 1234567890
+Authorization: Basic superadmin superadmin
 Content-Type: application/json
 
 {
   "id": "68d45dc3239ab744481465d1",
-  "text": "Hello Updated",
-  "translation": "Привіт Оновлено",
-  "explanation": "Greeting word in English Updated"
+  "text": "Hello World",
+  "translation": "Привіт Світ",
+  "explanation": "Famous programming phrase"
 }

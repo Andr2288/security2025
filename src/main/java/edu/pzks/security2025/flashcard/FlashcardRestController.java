@@ -50,12 +50,17 @@ public class FlashcardRestController {
         return "Hello User!";
     }
 
-    @GetMapping("hello/admin")
+    @GetMapping("/hello/admin")
     public String helloAdmin() {
         return "Hello Admin!";
     }
 
-    @GetMapping("hello/unknown")
+    @GetMapping("/hello/superadmin")
+    public String helloSuperadmin() {
+        return "Hello Superadmin!";
+    }
+
+    @GetMapping("/hello/unknown")
     public String helloUnknown() {
         return "Hello Unknown!";
     }

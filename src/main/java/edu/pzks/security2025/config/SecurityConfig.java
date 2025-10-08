@@ -10,6 +10,7 @@ package edu.pzks.security2025.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -35,11 +36,36 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrf ->csrf.disable())
-                .authorizeHttpRequests( req ->
-                        req.requestMatchers("/index.html").permitAll()
+        http.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(req ->
+                        req
+                                // PUBLIC
+                                .requestMatchers("/index.html").permitAll()
+
+                                // ADMIN ONLY
                                 .requestMatchers("/api/v1/flashcards/hello/admin").hasRole("ADMIN")
-                                .anyRequest().authenticated())
+
+                                // SUPERADMIN ONLY
+                                .requestMatchers("/api/v1/flashcards/hello/superadmin").hasRole("SUPERADMIN")
+
+                                // USER, ADMIN, SUPERADMIN
+                                .requestMatchers("/api/v1/flashcards/hello/user").hasAnyRole("USER", "ADMIN", "SUPERADMIN")
+
+                                // DELETE
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/flashcards/**").hasAnyRole("ADMIN", "SUPERADMIN")
+
+                                // POST (CREATE)
+                                .requestMatchers(HttpMethod.POST, "/api/v1/flashcards").hasAnyRole("ADMIN", "SUPERADMIN")
+
+                                // PUT (UPDATE)
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/flashcards").hasAnyRole("ADMIN", "SUPERADMIN")
+
+                                // GET
+                                .requestMatchers(HttpMethod.GET, "/api/v1/flashcards/**").authenticated()
+
+                                // Всі інші запити потребують авторизації
+                                .anyRequest().authenticated()
+                )
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
